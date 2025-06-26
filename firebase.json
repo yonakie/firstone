@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "public",
+    "public": ".",  // 将 "public" 改为 "."（表示当前根目录）
     "ignore": [
       "firebase.json",
       "**/.*",

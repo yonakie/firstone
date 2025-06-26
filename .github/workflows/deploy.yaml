@@ -12,6 +12,20 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      
+      - name: Verify project files
+        run: |
+          echo "项目文件列表:"
+          ls -la
+          echo "检查 index.html 是否存在:"
+          if [ -f "index.html" ]; then
+            echo "index.html 存在"
+          elif [ -f "public/index.html" ]; then
+            echo "public/index.html 存在"
+          else
+            echo "index.html 不存在!" >&2
+            exit 1
+          fi
         
       # 修改 Node.js 设置步骤，禁用缓存检查
       - name: Set up Node.js 20.x
