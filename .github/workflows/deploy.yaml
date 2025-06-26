@@ -7,22 +7,29 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest  # 也可以使用 windows-latest
+    runs-on: ubuntu-latest
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
         
-      # 添加 Node.js 设置步骤
-      - name: Set up Node.js
+      # 修改 Node.js 设置步骤，禁用缓存检查
+      - name: Set up Node.js 20.x
         uses: actions/setup-node@v3
         with:
-          node-version: 20.x  # 指定使用 Node.js v20
-          cache: 'npm'
+          node-version: 20.x
+          cache: 'npm'  # 保留缓存设置但忽略警告
+          cache-dependency-path: ''  # 添加这一行禁用依赖路径检查
         
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
-        # 建议指定兼容版本：改用 npm install -g firebase-tools@12.0.1
+        
+      # 添加版本检查步骤（可选）
+      - name: Display versions
+        run: |
+          echo "Node.js version: $(node --version)"
+          echo "npm version: $(npm --version)"
+          echo "Firebase CLI version: $(firebase --version)"
         
       - name: Deploy to Firebase
         run: firebase deploy --project=imafeedback --only hosting --token=${{ secrets.FIREBASE_TOKEN }}
